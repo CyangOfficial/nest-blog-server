@@ -1,3 +1,4 @@
+import { string } from '@hapi/joi'
 import * as mongoose from 'mongoose'
 
 export const PostSchema = new mongoose.Schema({

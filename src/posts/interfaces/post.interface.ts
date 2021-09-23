@@ -8,17 +8,21 @@ export interface Post extends Document {
 
     readonly summary: string;
 
-    readonly postUrl: string;
+    readonly posterUrl: string;
 
-    readonly tags: string[]
+    readonly tags: string[];
 
-    readonly lastModifiedDate: Date
+    readonly pv: number;
 
-    readonly createAt: Date
+    readonly like: number;
 
-    readonly updateAt: Date
+    readonly lastModifiedDate: Date;
 
-    readonly isPublic: Boolean
+    readonly createAt: Date;
+
+    readonly updateAt: Date;
+
+    readonly isPublic: Boolean;
 }
 
 export type PostDocument = Post & Document

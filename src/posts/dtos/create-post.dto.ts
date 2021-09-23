@@ -1,6 +1,12 @@
-import { IsString, IsNotEmpty, IsArray, IsDate, IsBoolean, IsNumber } from 'class-validator'
+import { IsString, IsNotEmpty, IsArray, IsDate, IsBoolean } from 'class-validator'
+import * as mongoose from 'mongoose'
+
 
 export class CreatePostDTO {
+	@IsString()
+	@IsNotEmpty()
+	readonly _id: mongoose.Schema.Types.ObjectId;
+
 	@IsString()
 	@IsNotEmpty()
 	readonly title: string;
