@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { PostsService } from './posts.service'
 import { CreatePostDTO, UpdatePostDTO } from './dtos/index.dto'
 import { PostModel, TagsModel } from './models/index.model'
@@ -11,10 +12,13 @@ export class PostsController {
 	constructor(private readonly postsService: PostsService) { }
 
 	// 获取所有文章
+	@UseGuards(AuthGuard('jwt'))
 	@ApiResponse({ status: 200, description: 'success', type: PostModel })
-	@Get()
+	@Get('getAll')
 	async findAll() {
-		return this.postsService.findAllPosts()
+		const posts = this.postsService.findAllPosts()
+		// console.log(posts)
+		return posts
 	}
 
 	// 根据ID查找文章
@@ -24,6 +28,7 @@ export class PostsController {
 		return post
 	}
 
+	@UseGuards(AuthGuard('jwt'))
 	// 文章访客+1
 	@Get('updatePV/:postId')
 	async updatePV(@Param('postId', new ValidateObjectIdPipe()) postId) {
@@ -37,9 +42,10 @@ export class PostsController {
 	getTags() {
 		const tags = this.postsService.findTags()
 	}
-
+	
 	// 创建文章
-	@ApiResponse({ status: 200, description: 'success', type: PostModel })
+	@UseGuards(AuthGuard('jwt'))
+	// @ApiResponse({ status: 200, description: 'success', type: PostModel })
 	@Post()
 	// @ApiResponse({ status: 201, description: '创建成功' })
 	// @ApiResponse({ status: 403, description: '创建失败' })
@@ -48,8 +54,10 @@ export class PostsController {
 	}
 
 	// 修改文章
+	@UseGuards(AuthGuard('jwt'))
 	@Put()
-	updatePost(@Body() updatePostDTO: UpdatePostDTO) {
-
+	update(@Body(new ValidateObjectIdPipe()) updatePostDTO: UpdatePostDTO) {
+		console.log(updatePostDTO)
+		return this.postsService.updateById(updatePostDTO)
 	}
 }

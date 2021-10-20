@@ -1,47 +1,45 @@
-import { IsString, IsNotEmpty, IsArray, IsDate, IsBoolean, IsNumber } from 'class-validator'
-// export class UpdatePostDTO {
-//     @IsString()
-//     @IsNotEmpty()
-//     readonly title: string;
-
-//     @IsString()
-//     @IsNotEmpty()
-//     readonly content: string;
-
-//     @IsString()
-//     @IsNotEmpty()
-//     readonly summary: string;
-
-//     @IsString()
-//     @IsNotEmpty()
-//     readonly postUrl: string;
-
-//     @IsArray()
-//     @IsNotEmpty()
-//     readonly tags: string[]
-
-//     @IsDate()
-//     @IsNotEmpty()
-//     readonly lastModifiedDate: Date
-
-//     @IsBoolean()
-//     @IsNotEmpty()
-//     readonly isPublic: Boolean
-
-//     @IsNumber()
-//     readonly pv?: Number
-
-//     @IsNumber()
-//     readonly like?: Number
-// }
-
-import { CreatePostDTO } from './create-post.dto'
-export class UpdatePostDTO extends CreatePostDTO {
-	@IsNumber()
+import { IsString, IsNotEmpty, IsArray, IsDate, IsBoolean, IsNumber, IsOptional, IsDefined } from 'class-validator'
+import { Type } from 'class-transformer'
+import * as mongoose from 'mongoose'
+export class UpdatePostDTO {
+	@IsDefined()
+	@IsString()
 	@IsNotEmpty()
+	readonly _id: mongoose.Schema.Types.ObjectId;
+
+	@IsOptional()
+	@IsString()
+	readonly title?: string;
+
+	@IsString()
+	@IsOptional()
+	readonly content?: string;
+
+	@IsString()
+	@IsOptional()
+	readonly summary?: string;
+
+	@IsString()
+	@IsOptional()
+	readonly postUrl?: string;
+
+	@IsArray()
+	@IsOptional()
+	readonly tags?: string[]
+
+	@IsDate()
+	@IsOptional()
+	readonly lastModifiedDate?: Date
+
+	@IsBoolean()
+	@IsOptional()
+	readonly isPublic?: Boolean
+
+	@IsNumber()
+	@IsOptional()
 	readonly pv?: number
 
 	@IsNumber()
-	@IsNotEmpty()
+	@IsOptional()
 	readonly like?: number
 }

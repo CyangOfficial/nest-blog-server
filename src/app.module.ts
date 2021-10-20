@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { HttpException, Module } from '@nestjs/common'
 import * as Joi from '@hapi/joi'
 // import { PostsController } from './posts/posts.controller';
 // import { PostsService } from './posts/posts.service';
@@ -10,7 +10,13 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { configuration, database } from './config/index'
 
 import { PostsModule } from './posts/posts.module';
-const businessModules = [PostsModule]
+import { AuthModule } from './auth/auth.module';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
+import { HttpExceptionFilter } from './shared/filters/http-exception.filter'
+import { TransformInterceptor } from './shared/interceptor/transform.interceptor'
+import { ValidationPipe } from './shared/pipes/validation.pipe'
+// import { UsersModule } from './users/users.module';
+const businessModules = [PostsModule, AuthModule]
 
 const libModules = [
   ConfigModule.forRoot({
@@ -39,7 +45,21 @@ const libModules = [
 
 @Module({
   imports: [...libModules, ...businessModules],
+  controllers: [],
   // controllers: [PostsController],
-  // providers: [PostsService],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor
+    }
+  ],
 })
 export class AppModule { }

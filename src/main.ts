@@ -8,6 +8,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService)
   const port = configService.get('APP_PORT')
   app.enableCors()
+  app.setGlobalPrefix('api')
+  // swagger option
   const options = new DocumentBuilder()
     .setTitle('nest-blog')
     .setDescription('nest-blog-api')

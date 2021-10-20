@@ -23,7 +23,8 @@ export const PostSchema = new mongoose.Schema({
 	},
 	lastModifiedDate: {
 		type: Date,
-		required: true
+		required: false,
+		default: Date.now()
 	},
 	isPublic: {
 		type: Boolean,

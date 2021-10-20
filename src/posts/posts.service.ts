@@ -1,7 +1,6 @@
 import { Injectable, HttpException, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose'
-import * as mongoose from 'mongoose'
 import { Post, } from './interfaces/post.interface'
 import { PostModel, TagsModel } from './models/index.model'
 import { CreatePostDTO, UpdatePostDTO } from './dtos/index.dto'
@@ -18,6 +17,7 @@ export class PostsService {
 	// 根据ID查找文章
 	async findOneById(id: string): Promise<PostModel> {
 		const itemPost = await this.postModel.findById(id)
+		console.log(itemPost)
 		if (!itemPost || itemPost.isPublic === false) {
 			throw new NotFoundException('没找到该文章')
 		}
@@ -58,12 +58,13 @@ export class PostsService {
 		return await this.postModel.find({ isPublic: { $ne: false } }).sort({ "like": -1 }).limit(limit)
 	}
 
-	// 根据ID删除文章
+	// 动态ID删除
 	async deleteOneById(id: string): Promise<PostModel> {
 		return await this.postModel.findByIdAndDelete(id)
 	}
 
-	async batchDelete(ids: string): Promise<any[]> {
-		await this.postModel.deleteMany({})
+	// 批量删除
+	async batchDelete(ids: string): Promise<any> {
+		return await this.postModel.deleteMany({})
 	}
 }

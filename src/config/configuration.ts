@@ -1,4 +1,5 @@
 export const configuration = () => ({
 	port: Number(process.env.PORT),
-	jwtSecret: process.env.JWT_SECRET
+	jwtSecretKey: process.env.JWT_SECRET_KEY,
+	jwtExpiresTime: process.env.JWT_EXPIRES_TIME
 })
