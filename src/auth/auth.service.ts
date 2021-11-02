@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt'
+import { JwtService } from '../jwt/jwt.service'
 import { UsersService } from '../users/users.service'
 import { LoginInputDto } from './dtos/login.input'
 
@@ -11,27 +11,20 @@ export class AuthService {
   ) { }
 
   async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne(username)
-    console.log(user)
+    const user = await this.usersService.findOneByUserName(username)
     if (user && user.password === password) {
       const { password, ...result } = user
       return result
     }
     throw new UnauthorizedException('账号或密码错误')
   }
-
-  async generateJWT(username: string, password: string) {
-    const payload = { username, password }
-    return this.jwtService.sign(payload)
-  }
-
+  
   async login(user: LoginInputDto) {
     const { username, password } = user
-    console.log('user:', user)
     const result = await this.validateUser(username, password)
     return {
       ...result,
-      access_token: await this.generateJWT(username, password)
+      access_token: await this.jwtService.generateJWT(username, password)
     }
   }
 }

@@ -1,6 +1,5 @@
-import { string } from '@hapi/joi'
-import mongoose from 'mongoose'
-import bcrypt from 'bcrypt'
+import * as mongoose from 'mongoose'
+import * as bcrypt from 'bcrypt'
 import { encrypt } from '../../shared/utils'
 import { User } from '../interfaces/user.interface'
 
@@ -11,8 +10,8 @@ export const UserSchema = new mongoose.Schema({
     index: { unique: true }
   },
   email: {
-    teyp: String,
-    required: false
+    type: String,
+    required: true
   },
   password: {
     type: String,

@@ -11,12 +11,15 @@ import { configuration, database } from './config/index'
 
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module'
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 import { HttpExceptionFilter } from './shared/filters/http-exception.filter'
 import { TransformInterceptor } from './shared/interceptor/transform.interceptor'
 import { ValidationPipe } from './shared/pipes/validation.pipe'
 // import { UsersModule } from './users/users.module';
-const businessModules = [PostsModule, AuthModule]
+import { JwtModule } from './jwt/jwt.module';
+import { UploaderModule } from './uploader/uploader.module';
+const businessModules = [PostsModule, AuthModule, UsersModule, JwtModule, UploaderModule]
 
 const libModules = [
   ConfigModule.forRoot({

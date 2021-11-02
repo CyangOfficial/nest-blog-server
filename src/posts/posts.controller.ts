@@ -57,7 +57,6 @@ export class PostsController {
 	@UseGuards(AuthGuard('jwt'))
 	@Put()
 	update(@Body(new ValidateObjectIdPipe()) updatePostDTO: UpdatePostDTO) {
-		console.log(updatePostDTO)
 		return this.postsService.updateById(updatePostDTO)
 	}
 }

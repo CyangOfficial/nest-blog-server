@@ -17,7 +17,6 @@ export class PostsService {
 	// 根据ID查找文章
 	async findOneById(id: string): Promise<PostModel> {
 		const itemPost = await this.postModel.findById(id)
-		console.log(itemPost)
 		if (!itemPost || itemPost.isPublic === false) {
 			throw new NotFoundException('没找到该文章')
 		}

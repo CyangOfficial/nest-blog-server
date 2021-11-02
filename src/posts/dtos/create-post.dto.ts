@@ -1,14 +1,7 @@
-import { IsString, IsNotEmpty, IsArray, IsDate, IsBoolean } from 'class-validator'
-import * as mongoose from 'mongoose'
-
-
+import { IsString, IsNotEmpty, IsArray, IsDate, IsBoolean, IsUrl } from 'class-validator'
 export class CreatePostDTO {
 	@IsString()
-	@IsNotEmpty()
-	readonly _id: mongoose.Schema.Types.ObjectId;
-
-	@IsString()
-	@IsNotEmpty()
+	@IsNotEmpty({ message: '标题不能为空' })
 	readonly title: string;
 
 	@IsString()
@@ -16,15 +9,16 @@ export class CreatePostDTO {
 	readonly content: string;
 
 	@IsString()
-	@IsNotEmpty()
+	@IsNotEmpty({ message: '摘要不能为空' })
 	readonly summary: string;
 
 	@IsString()
-	@IsNotEmpty()
+	@IsUrl()
+	@IsNotEmpty({ message: '封面不能为空' })
 	readonly postUrl: string;
 
 	@IsArray()
-	@IsNotEmpty()
+	@IsNotEmpty({ message: '标签不能为空' })
 	readonly tags: string[]
 
 	@IsDate()
@@ -32,11 +26,9 @@ export class CreatePostDTO {
 	readonly lastModifiedDate: Date
 
 	@IsBoolean()
-	@IsNotEmpty()
+	@IsNotEmpty({ message: '状态不能为空' })
 	readonly isPublic: Boolean
 }
-
-
 
 // export class UpdatePostDTO extends OmitType(CreatePostDTO, ['name'] as const) { }
 // export class UpdateCatDto extends OmitType(CreatePostDTO, ['name'] as const) {}
