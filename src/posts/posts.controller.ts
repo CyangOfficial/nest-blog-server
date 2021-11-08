@@ -50,6 +50,7 @@ export class PostsController {
 	// @ApiResponse({ status: 201, description: '创建成功' })
 	// @ApiResponse({ status: 403, description: '创建失败' })
 	create(@Body() postInfo: CreatePostDTO) {
+    console.log(postInfo)
 		return this.postsService.createPost(postInfo)
 	}
 

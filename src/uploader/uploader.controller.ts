@@ -8,29 +8,11 @@ import { diskStorage } from 'multer'
 export class UploaderController {
   constructor(
     private readonly uploaderService: UploaderService
-  ) {}
-  // @Post('upload')
-  // @UseInterceptors(FileInterceptor('image'))
-  // uploadFile(@UploadedFile() file: Express.Multer.File) {
-  //   console.log(file)
-  // }
+  ) { }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file', { storage: diskStorage({
-    destination: (req: Express.Request, file: Express.Multer.File, cb) => {
-      cb(null, 'public/uploads')
-    },
-    filename: (req: Express.Request, file: Express.Multer.File, cb) => {
-      // const url = 'a.jpg'
-      cb(null, file.originalname)
-    }
-  }), limits: { fileSize: 1024 * 1024 * 5 } }))
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 1024 * 1024 * 5 } }))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    const { buffer } = file
-    console.log(file)
-    const webpBuffer = await this.uploaderService.imgToWebp(buffer)
-    return {
-      file: webpBuffer,
-    }
+    return await this.uploaderService.uploadFile(file)
   }
 }

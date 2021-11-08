@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty, IsArray, IsDate, IsBoolean, IsUrl } from 'class-validator'
+import { Type } from 'class-transformer'
 export class CreatePostDTO {
 	@IsString()
 	@IsNotEmpty({ message: '标题不能为空' })
@@ -15,12 +16,13 @@ export class CreatePostDTO {
 	@IsString()
 	@IsUrl()
 	@IsNotEmpty({ message: '封面不能为空' })
-	readonly postUrl: string;
+	readonly posterUrl: string;
 
 	@IsArray()
 	@IsNotEmpty({ message: '标签不能为空' })
 	readonly tags: string[]
 
+  @Type(() => Date)
 	@IsDate()
 	@IsNotEmpty()
 	readonly lastModifiedDate: Date
