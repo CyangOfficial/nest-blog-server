@@ -7,7 +7,7 @@ import * as Joi from '@hapi/joi'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 // import configuration from './config/configuration'
-import { configuration, database } from './config/index'
+import { configuration, database, alioss} from './config/index'
 
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
@@ -24,8 +24,9 @@ const businessModules = [PostsModule, AuthModule, UsersModule, JwtModule, Upload
 const libModules = [
   ConfigModule.forRoot({
     isGlobal: true,
+    cache: true,
     envFilePath: '.development.env',
-    load: [configuration, database],
+    load: [configuration, database, alioss],
     //忽略配置文件，为true则仅读取操作系统环境变量，常用于生产环境
     ignoreEnvFile: false,
     validationSchema: Joi.object({
