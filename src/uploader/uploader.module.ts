@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UploaderService } from './uploader.service';
 import { UploaderController } from './uploader.controller';
-import { MulterModule } from '@nestjs/platform-express'
+import { MulterModule } from '@nestjs/platform-express';
 @Module({
   // imports: [MulterModule.registerAsync({
   //   useFactory: () => ({
@@ -9,6 +9,6 @@ import { MulterModule } from '@nestjs/platform-express'
   //   }),
   // })],
   providers: [UploaderService],
-  controllers: [UploaderController]
+  controllers: [UploaderController],
 })
-export class UploaderModule { }
+export class UploaderModule {}

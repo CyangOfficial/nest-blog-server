@@ -1,25 +1,31 @@
-import { HttpException, Module } from '@nestjs/common'
-import * as Joi from '@hapi/joi'
+import { HttpException, Module } from '@nestjs/common';
+import * as Joi from '@hapi/joi';
 // import { PostsController } from './posts/posts.controller';
 // import { PostsService } from './posts/posts.service';
 // import { ConfigMod as ConfigModule } from './config/config.module';
 
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { MongooseModule } from '@nestjs/mongoose'
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 // import configuration from './config/configuration'
-import { configuration, database, alioss} from './config/index'
+import { configuration, database, alioss } from './config/index';
 
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module'
-import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
-import { HttpExceptionFilter } from './shared/filters/http-exception.filter'
-import { TransformInterceptor } from './shared/interceptor/transform.interceptor'
-import { ValidationPipe } from './shared/pipes/validation.pipe'
+import { UsersModule } from './users/users.module';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
+import { TransformInterceptor } from './shared/interceptor/transform.interceptor';
+import { ValidationPipe } from './shared/pipes/validation.pipe';
 // import { UsersModule } from './users/users.module';
 import { JwtModule } from './jwt/jwt.module';
 import { UploaderModule } from './uploader/uploader.module';
-const businessModules = [PostsModule, AuthModule, UsersModule, JwtModule, UploaderModule]
+const businessModules = [
+  PostsModule,
+  AuthModule,
+  UsersModule,
+  JwtModule,
+  UploaderModule,
+];
 
 const libModules = [
   ConfigModule.forRoot({
@@ -31,9 +37,11 @@ const libModules = [
     ignoreEnvFile: false,
     validationSchema: Joi.object({
       HOST: Joi.string().default('localhost'),
-      NODE_ENV: Joi.string().valid('development', 'production', 'test', 'provision').default('development'),
+      NODE_ENV: Joi.string()
+        .valid('development', 'production', 'test', 'provision')
+        .default('development'),
       PORT: Joi.number().default(3000),
-    })
+    }),
   }),
   MongooseModule.forRootAsync({
     useFactory: async (Config: ConfigService) => ({
@@ -43,9 +51,9 @@ const libModules = [
       useUnifiedTopology: true,
       // useCreateIndex: true,
     }),
-    inject: [ConfigService]
-  })
-]
+    inject: [ConfigService],
+  }),
+];
 
 @Module({
   imports: [...libModules, ...businessModules],
@@ -54,16 +62,16 @@ const libModules = [
   providers: [
     {
       provide: APP_PIPE,
-      useValue: new ValidationPipe
+      useValue: new ValidationPipe(),
     },
     {
       provide: APP_FILTER,
-      useClass: HttpExceptionFilter
+      useClass: HttpExceptionFilter,
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: TransformInterceptor
-    }
+      useClass: TransformInterceptor,
+    },
   ],
 })
-export class AppModule { }
+export class AppModule {}

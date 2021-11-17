@@ -1,28 +1,25 @@
-import { string } from "@hapi/joi"
-import { Document } from 'mongoose'
+import { Document } from 'mongoose';
 
 export interface Post extends Document {
-    readonly title: string;
+  readonly title: string;
 
-    readonly content: string;
+  readonly content: string;
 
-    readonly summary: string;
+  readonly summary: string;
 
-    readonly posterUrl: string;
+  readonly posterUrl: string;
 
-    readonly tags: string[];
+  readonly tags: string[];
 
-    readonly pv: number;
+  readonly pv: number;
 
-    readonly like: number;
+  readonly like: number;
 
-    readonly lastModifiedDate: Date;
+  readonly lastModifiedDate: Date;
 
-    readonly createAt: Date;
+  readonly createAt: Date;
 
-    readonly updateAt: Date;
+  readonly updateAt: Date;
 
-    readonly isPublic: Boolean;
+  readonly isPublic: boolean;
 }
-
-export type PostDocument = Post & Document

@@ -1,1 +1,1 @@
-export const IMAGE_CONSTS = ['jpeg', 'jpg', 'png', 'gif']
+export const IMAGE_CONSTS = ['jpeg', 'jpg', 'png', 'gif'];

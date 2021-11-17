@@ -1,19 +1,17 @@
 export const database = () => {
-  const { env } = process
-  const host = env.DATABASE_HOST
-  const port = Number(env.DATABASE_PORT)
-  const userName = env.DATABASE_USERNAME
-  const passWord = env.DATABASE_PASSWORD
-  const dbName = env.DATABASE_NAME
-  const prefix = 'mongodb://'
-  const auth = `${userName}:${passWord}@`
-  const mongoUrl = `${prefix}${host}:${port}/${dbName}`
+  const { env } = process;
+  const host = env.DATABASE_HOST;
+  const port = Number(env.DATABASE_PORT);
+  const userName = env.DATABASE_USERNAME;
+  const passWord = env.DATABASE_PASSWORD;
+  const dbName = env.DATABASE_NAME;
+  const prefix = 'mongodb://';
+  const auth = `${userName}:${passWord}@`;
+  const mongoUrl = `${prefix}${host}:${port}/${dbName}`;
   return {
-    mongoUrl
-  }
+    mongoUrl,
+  };
 };
-
-
 
 // import { registerAs } from '@nestjs/config'
 
