@@ -22,36 +22,43 @@ export class PostsService {
 
   // 分页查找公开文章
   async fintPublicByPagination(params: PaginationDTO): Promise<PostsModel> {
-    const { page, pageSize, title, tag } = params;
-    const queryCriteria = {
+    const { page, pageSize = 10, title, tag } = params;
+    const queryCondition = {
       title: { $regex: title ? title : '', $options: 'i' },
       isPublic: { $ne: false },
-      tags: tag,
+      // tags: tag,
     };
 
-    const total = await this.postModel.find(queryCriteria).count();
+    const total = await this.getTotalPosts(title);
     const items = await this.postModel
-      .find(queryCriteria, { content: 0, __v: 0 })
+      .find(queryCondition, { content: 0, __v: 0 })
       .sort({ createdAt: -1 })
       .skip((page - 1) * pageSize)
-      .limit(pageSize);
+      .limit(Number(pageSize));
 
     return {
       total,
-      page,
-      pageSize,
+      page: page * 1,
+      pageSize: pageSize * 1,
       items,
     };
   }
 
-  async getTotalPosts(): Promise<number> {
-    return this.postModel.countDocuments();
+  // 统计文章数量
+  async getTotalPosts(title, isPublic = true): Promise<number> {
+    let queryCondition = {
+      title: { $regex: title ? title : '', $options: 'i' },
+    };
+    queryCondition = isPublic
+      ? Object.assign({ isPublic: { $ne: false } }, queryCondition)
+      : queryCondition;
+    return this.postModel.countDocuments(queryCondition);
   }
 
   // 分页查找所有文章
   async findByPagination(params: PaginationDTO): Promise<PostsModel> {
-    const { page = 1, pageSize = 10, title } = params;
-    const total = await this.getTotalPosts();
+    const { page, pageSize, title } = params;
+    const total = await this.getTotalPosts(title, false);
     const items = await this.postModel
       .find(
         { title: { $regex: title ? title : '', $options: 'i' } },
@@ -60,19 +67,27 @@ export class PostsService {
       .sort({ createdAt: -1 })
       .skip((page - 1) * pageSize)
       .limit(Number(pageSize));
-
     return {
       total,
-      page,
-      pageSize,
+      page: page * 1,
+      pageSize: pageSize * 1,
       items,
     };
   }
 
   // 根据ID查找文章
-  async findOneById(id: string): Promise<PostModel> {
+  async findPublicOneById(id: string): Promise<PostModel> {
     const itemPost = await this.postModel.findById(id);
     if (!itemPost || itemPost.isPublic === false) {
+      throw new NotFoundException('没找到该文章');
+    }
+    return itemPost;
+  }
+
+  // 根据ID查找文章
+  async findOneById(id: string): Promise<PostModel> {
+    const itemPost = await this.postModel.findById(id, { _id: 0 });
+    if (!itemPost) {
       throw new NotFoundException('没找到该文章');
     }
     return itemPost;

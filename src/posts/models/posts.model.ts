@@ -2,15 +2,15 @@ import { ApiProperty } from '@nestjs/swagger';
 import { PostModel } from './post.model';
 
 export class PostsModel {
-  @ApiProperty({ type: String, description: '总计' })
+  @ApiProperty({ type: Number, description: '总计' })
   readonly total: number;
 
-  @ApiProperty({ type: String, description: '页' })
+  @ApiProperty({ type: Number, description: '页' })
   readonly page: number;
 
-  @ApiProperty({ type: String, description: '页数' })
+  @ApiProperty({ type: Number, description: '页数' })
   readonly pageSize: number;
 
-  @ApiProperty({ type: String, description: '列表' })
+  @ApiProperty({ type: Array, description: '列表' })
   readonly items: PostModel[];
 }

@@ -1,14 +1,27 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  Min,
+} from 'class-validator';
+import { Type, Transform } from 'class-transformer';
 export class PaginationDTO {
   @IsNumber()
   @IsNotEmpty()
-  @Type(() => Number)
+  @Min(1)
+  @Transform(({ value, key, obj, type, options }) => {
+    // console.log(value, key, obj, type)
+    return value * 1;
+  })
   public page: number;
 
   @IsNumber()
   @IsNotEmpty()
-  @Type(() => Number)
+  @Transform(({ value, key, obj, type, options }) => {
+    // console.log(value, key, obj, type)
+    return value * 1;
+  })
   public pageSize: number;
 
   @IsString()
@@ -18,6 +31,10 @@ export class PaginationDTO {
   @IsString()
   @IsOptional()
   public tag?: string;
+
+  @IsString()
+  @IsOptional()
+  public field?: string;
 }
 
 // export class UpdatePostDTO extends OmitType(CreatePostDTO, ['name'] as const) { }

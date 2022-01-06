@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -14,16 +15,21 @@ import { CreatePostDTO, UpdatePostDTO, PaginationDTO } from './dtos/index.dto';
 import { PostModel, TagsModel } from './models/index.model';
 import { ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { ValidateObjectIdPipe } from '../shared/pipes/validate-object-id.pipe';
-
+import { identity } from 'rxjs';
 @ApiTags('文章详情')
 @Controller('post')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @Get('')
+  async posts(@Query() query: PaginationDTO) {
+    return await this.postsService.fintPublicByPagination(query);
+  }
+
   // 分页查找所有文章
+  @UseGuards(AuthGuard('jwt'))
   @Get('getPosts')
   async getPosts(@Query() query: PaginationDTO) {
-    console.log(query);
     return await this.postsService.findByPagination(query);
   }
 
@@ -33,15 +39,17 @@ export class PostsController {
   @Get('getAll')
   async findAll() {
     const posts = this.postsService.findAllPosts();
-    // console.log(posts)
     return posts;
   }
 
   // 根据ID查找文章
+  @UseGuards(AuthGuard('jwt'))
   @Get(':postId')
   async findOneById(@Param('postId', new ValidateObjectIdPipe()) postId) {
     const post = await this.postsService.findOneById(postId);
-    return post;
+    return {
+      items: post,
+    };
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -69,10 +77,16 @@ export class PostsController {
     return this.postsService.createPost(postInfo);
   }
 
-  // 修改文章
+  // 更新文章
   @UseGuards(AuthGuard('jwt'))
   @Put()
   update(@Body(new ValidateObjectIdPipe()) updatePostDTO: UpdatePostDTO) {
     return this.postsService.updateById(updatePostDTO);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':id')
+  async deletePost(@Param('id', new ValidateObjectIdPipe()) id) {
+    return await this.postsService.deleteOneById(id);
   }
 }

@@ -37,6 +37,7 @@ export class UpdatePostDTO {
   readonly tags?: string[];
 
   @IsDate()
+  @Type(() => Date)
   @IsOptional()
   readonly lastModifiedDate?: Date;
 
