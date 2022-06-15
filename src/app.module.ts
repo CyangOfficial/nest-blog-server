@@ -19,12 +19,14 @@ import { ValidationPipe } from './shared/pipes/validation.pipe';
 // import { UsersModule } from './users/users.module';
 import { JwtModule } from './jwt/jwt.module';
 import { UploaderModule } from './uploader/uploader.module';
+import { PlayerModule } from './player/player.module';
 const businessModules = [
   PostsModule,
   AuthModule,
   UsersModule,
   JwtModule,
   UploaderModule,
+  PlayerModule,
 ];
 
 const libModules = [

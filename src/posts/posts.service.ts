@@ -85,13 +85,16 @@ export class PostsService {
   }
 
   // 根据ID查找文章
-  async findOneById(id: string): Promise<PostModel> {
+  async findOneById(id: string, isPublic: boolean): Promise<PostModel> {
+    // const queryCondition = publicPost ? { isPublic: { $ne: false } } :
     const itemPost = await this.postModel.findById(id, { _id: 0 });
-    if (!itemPost) {
+    if (!itemPost || (isPublic && itemPost.isPublic === false)) {
       throw new NotFoundException('没找到该文章');
     }
     return itemPost;
   }
+
+  // async findPublicById()
 
   // 根据ID更新文章
   async updateById(params: UpdatePostDTO): Promise<PostModel> {
@@ -112,7 +115,7 @@ export class PostsService {
 
   // 更新文章访客量 +1
   async updatePV(id: string): Promise<PostModel> {
-    const { pv } = await this.findOneById(id);
+    const { pv } = await this.findOneById(id, false);
     return await this.postModel.findByIdAndUpdate(
       id,
       { pv: pv + 1 },
@@ -122,7 +125,7 @@ export class PostsService {
 
   // 更新文章点赞 +1
   async updateLike(id: string): Promise<PostModel> {
-    const { like } = await this.findOneById(id);
+    const { like } = await this.findOneById(id, false);
     return await this.postModel.findByIdAndUpdate(
       id,
       { like: like + 1 },

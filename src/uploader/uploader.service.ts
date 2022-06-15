@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import * as sharp from 'sharp';
-import * as COS from 'cos-nodejs-sdk-v5';
+import sharp from 'sharp';
+import COS from 'cos-nodejs-sdk-v5';
 import { v4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { extname } from 'path';

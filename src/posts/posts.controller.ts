@@ -42,11 +42,20 @@ export class PostsController {
     return posts;
   }
 
-  // 根据ID查找文章
-  @UseGuards(AuthGuard('jwt'))
+  // 根据ID查找文章(已发布)
   @Get(':postId')
   async findOneById(@Param('postId', new ValidateObjectIdPipe()) postId) {
-    const post = await this.postsService.findOneById(postId);
+    const post = await this.postsService.findOneById(postId, true);
+    return {
+      items: post,
+    };
+  }
+
+  // 根据ID查找文章(发布/未发布)
+  @Get('itemPost/:postId')
+  @UseGuards(AuthGuard('jwt'))
+  async findJwtItemPost(@Param('postId', new ValidateObjectIdPipe()) postId) {
+    const post = await this.postsService.findOneById(postId, false);
     return {
       items: post,
     };

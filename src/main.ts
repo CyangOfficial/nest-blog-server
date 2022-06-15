@@ -2,12 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import helmet from 'helmet';
+// import csurf from 'csurf';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const configService = app.get(ConfigService);
   const port = configService.get('APP_PORT');
-  app.enableCors();
+
+  app.use(helmet());
+  // app.enableCors();
+  // app.use(csurf());
   app.setGlobalPrefix('api');
   // swagger option
   const options = new DocumentBuilder()
